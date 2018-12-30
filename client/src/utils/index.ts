@@ -1,6 +1,8 @@
 export * from './globalInteractionListener';
 
-import createRecorder from './createRecorder';
+import createMicStream from './createMicStream';
+import converter from './converter';
+import config from './config';
 import print, { jsonPrettify } from './print';
 
-export { createRecorder, print, jsonPrettify };
+export { createMicStream, print, jsonPrettify, converter, config };

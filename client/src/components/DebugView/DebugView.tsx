@@ -1,27 +1,31 @@
 import React, { useContext } from 'react';
 import { useToggle } from 'react-use';
-import { Button, Text, DropDownIcon, Container } from './styled';
-import { WebAudioContext } from '../../contexts/Audio';
+import { AbsoluteButton, DropDownIcon, Container } from './styled';
 import Visualizer from '../Visualizer';
+import Recorder from '../../models/Recorder';
+import { Text } from '../General';
 
-export default () => {
-  const [ audioState ] = useContext(WebAudioContext);
+interface IProps {
+  recorder: Recorder;
+}
+
+export default ({ recorder }: IProps) => {
   const [ isDebugVisible, toggleDebugView ] = useToggle(false);
 
   const toggle = () => toggleDebugView(!isDebugVisible);
 
   return (
     <React.Fragment>
-      <Button onClick={toggle}>
+      <AbsoluteButton onClick={toggle}>
         <Text>
           DEBUG
           <DropDownIcon />
         </Text>
-      </Button>
+      </AbsoluteButton>
 
       {isDebugVisible && (
         <Container>
-          {audioState.analyser && <Visualizer analyser={audioState.analyser} />}
+          <Visualizer analyser={recorder.analyser} />
         </Container>
       )}
     </React.Fragment>

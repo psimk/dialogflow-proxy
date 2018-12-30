@@ -11,7 +11,7 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     color: ${theme.textColor}
   }
-  body {
+  body, #root {
     background-color: ${theme.backgroundColor};
     width: 100vw;
     height: 100vh;
