@@ -8,7 +8,6 @@
   },
   "dependencies": {
     "dialogflow": "^0.7.0",
-    "dotenv": "^6.2.0",
     "nodemon": "^1.18.7",
     "ts-node": "^7.0.1",
     "typescript": "3.2.2",
@@ -16,7 +15,6 @@
   },
   "devDependencies": {
     "@types/dialogflow": "^0.6.5",
-    "@types/dotenv": "^6.1.0",
     "@types/node": "10.12.17",
     "@types/ws": "^6.0.1",
     "prettier": "^1.15.3",
