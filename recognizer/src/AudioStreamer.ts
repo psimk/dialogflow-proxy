@@ -16,8 +16,6 @@ const enum EVENTS {
 }
 
 export default class AudioStreamer {
-  static PROJECT_ID = 'thuum-5fd63';
-
   private session: string = '';
   private hasEnded: boolean = false;
   private stream: (WriteStream & ReadStream) | null = null;
@@ -29,7 +27,7 @@ export default class AudioStreamer {
 
   constructor(handlers: IAudioStreamerHandlers, debug: boolean = false) {
     this.client = new SessionsClient({
-      projectId: AudioStreamer.PROJECT_ID,
+      projectId: utils.PROJECT_ID,
       keyFilename: utils.getClientSecretPath(),
     });
 

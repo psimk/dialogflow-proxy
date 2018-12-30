@@ -1,6 +1,9 @@
+import { join } from 'path';
 import { IStreamPreConfig, AudioEncoding, LanguageCodes } from '../types';
 import AudioStreamer from '../AudioStreamer';
-import { join } from 'path';
+import * as secret from '../../clientSecret.json';
+
+const PROJECT_ID = secret.project_id;
 
 const defaultInitialStreamRequestConfig = {
   queryParams: {},
@@ -20,7 +23,7 @@ export default {
     singleUtterance,
     audioConfig,
   }: IStreamPreConfig) => {
-    const sessionPath = `projects/${AudioStreamer.PROJECT_ID}/agent/sessions/${sessionId}`;
+    const sessionPath = `projects/${PROJECT_ID}/agent/sessions/${sessionId}`;
 
     return {
       session: sessionPath,
@@ -39,4 +42,5 @@ export default {
     };
   },
   getClientSecretPath: () => join(__dirname, '..', '..', './clientSecret.json'),
+  PROJECT_ID,
 };
