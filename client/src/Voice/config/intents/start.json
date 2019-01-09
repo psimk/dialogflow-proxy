@@ -1,0 +1,13 @@
+{
+  "events": [ "WELCOME" ],
+  "phrases": {
+    "en": [ "Hello" ]
+  },
+  "responses": {
+    "en": [ "Heyy, Do you like pizza?" ]
+  },
+  "parameters": [],
+  "priority": "normal",
+  "inputContext": "",
+  "outputContext": "Introduction"
+}

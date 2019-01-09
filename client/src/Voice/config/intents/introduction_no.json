@@ -1,0 +1,13 @@
+{
+  "events": [],
+  "phrases": {
+    "en": [ "No" ]
+  },
+  "responses": {
+    "en": [ "bru, what?" ]
+  },
+  "parameters": [],
+  "priority": "normal",
+  "inputContext": "Introduction",
+  "outputContext": "OtherContext"
+}

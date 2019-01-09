@@ -1,0 +1,13 @@
+{
+  "events": [],
+  "phrases": {
+    "en": [ "Yes" ]
+  },
+  "responses": {
+    "en": [ "Great you are an amazing person!!" ]
+  },
+  "parameters": [],
+  "priority": "normal",
+  "inputContext": "Introduction",
+  "outputContext": "OtherContext"
+}
