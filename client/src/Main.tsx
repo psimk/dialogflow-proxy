@@ -17,31 +17,22 @@ const Container = styled.div`
 const voice = new Voice();
 
 export default () => {
-  const [ response, setResponse ] = useState<any>({});
+  const [ expectedContext, setExpectedContext ] = useState<string>('');
   console.log('Main: render');
-
-  useEffect(() => {
-    voice.init();
-  });
-
-  useEffect(
-    () => {
-      const { intent } = response;
-      if (!intent) return;
-
-      // @ts-ignore: TS7071
-      const foundIntent = intents[String(intent)] as IIntent;
-
-      console.log(foundIntent.inputContext);
-      console.log(foundIntent.outputContext);
-    },
-    [ response ],
-  );
 
   const onClick = async () => {
     const response = await voice.listen();
 
-    setResponse(response);
+    // @ts-ignore: TS7071
+    const intent = intents[String(response.intent)] as IIntent;
+
+    console.log(intent, response);
+
+    if (!intent) return;
+
+    console.log(intent.inputContext === expectedContext);
+
+    setExpectedContext(intent.outputContext);
   };
 
   return (
@@ -49,8 +40,6 @@ export default () => {
       <DebugView analyser={voice.analyser} />
       <Container>
         <Button onClick={onClick}>Speech Recognition</Button>
-        {response.transcript && <Text>{response.transcript}</Text>}
-        {response.intent && <Text>Intent: {response.intent}</Text>}
       </Container>
     </React.Fragment>
   );

@@ -16,23 +16,15 @@ export default class Voice {
     this.recorder = new Recorder();
     this.socket = new Sockets();
     this.response = null;
-  }
 
-  public async init(): Promise<void> {
-    await this.recorder.init();
+    this.socket.onMessage = (message: MessageEvent) => {
+      this.response = JSON.parse(message.data) as IResponse;
 
-    const onOpen = () => {
-      this.socket.onMessage = (message: MessageEvent) => {
-        this.response = JSON.parse(message.data) as IResponse;
-
-        if (this.response.intent) this.recorder.enabled = false;
-      };
-
-      this.recorder.onAudioData = (floatArray) => this.socket.sendBuffer(floatArray);
+      if (this.response.intent) this.recorder.enabled = false;
     };
 
-    if (this.socket.isOpen) onOpen();
-    else this.socket.onOpen = onOpen;
+    this.recorder.onAudioData = floatArray => this.socket.sendBuffer(floatArray);
+    this.recorder.init();
   }
 
   public async listen(): Promise<IResponse | null> {
@@ -41,9 +33,9 @@ export default class Voice {
     this.recorder.enabled = true;
     let interval: NodeJS.Timeout;
 
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const checker = () => {
-        if (this.response) {
+        if (this.response && this.response.intent) {
           clearInterval(interval);
 
           const response = { ...this.response };
