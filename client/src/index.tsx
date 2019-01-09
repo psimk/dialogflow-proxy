@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import Main from './Main';
-import { WebAudioContextProvider } from './contexts/Audio/Audio';
 import { createGlobalStyle } from 'styled-components';
 import theme from './constants/theme';
 
@@ -19,10 +18,10 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const App = () => (
-  <WebAudioContextProvider>
+  <Fragment>
     <Main />
     <GlobalStyle />
-  </WebAudioContextProvider>
+  </Fragment>
 );
 
 ReactDOM.render(<App />, document.getElementById('root'));

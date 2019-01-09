@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import nanoid from 'nanoid';
 import DebugView from './components/DebugView';
 import Recorder from './models/Recorder';

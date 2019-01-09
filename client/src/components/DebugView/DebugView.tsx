@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useToggle } from 'react-use';
 import { AbsoluteButton, DropDownIcon, Container } from './styled';
 import Visualizer from '../Visualizer';
