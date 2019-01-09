@@ -14,23 +14,39 @@ export enum AudioEncoding {
 }
 
 export interface IStreamConfig {
-  sessionId: string;
-  singleUtterance?: boolean;
-  audioConfig?: {
-    audioEncoding?: AudioEncoding;
-    sampleRateHertz?: number;
-    languageCode?: LanguageCodes;
+  session: string;
+  queryParams: {
+    session: string;
+  };
+  queryInput: {
+    singleUtterance?: boolean;
+    audioConfig?: {
+      audioEncoding?: AudioEncoding;
+      sampleRateHertz?: number;
+      languageCode?: LanguageCodes;
+    };
   };
 }
 
+const PROJECT_ID = 'thuum-5fd63';
+
 export default {
-  createStreamConfig: (sessionId: string): IStreamConfig => ({
-    sessionId,
-    singleUtterance: true,
-    audioConfig: {
-      audioEncoding: AudioEncoding.Linear16,
-      sampleRateHertz: 16000,
-      languageCode: LanguageCodes.enUS,
-    },
-  }),
+  createStreamConfig: (sessionId: string): IStreamConfig => {
+    const sessionPath = `projects/${PROJECT_ID}/agent/sessions/${sessionId}`;
+
+    return {
+      session: sessionPath,
+      queryParams: {
+        session: sessionPath,
+      },
+      queryInput: {
+        singleUtterance: true,
+        audioConfig: {
+          audioEncoding: AudioEncoding.Linear16,
+          sampleRateHertz: 16000,
+          languageCode: LanguageCodes.enUS,
+        },
+      },
+    };
+  },
 };

@@ -1,6 +1,6 @@
 import { SessionsClient } from 'dialogflow';
 import { ReadStream, WriteStream, createWriteStream } from 'fs';
-import { IStreamPreConfig } from './types';
+import { IStreamConfig } from './types';
 import utils from './utils';
 
 interface IAudioStreamerHandlers {
@@ -41,26 +41,25 @@ export default class AudioStreamer {
     }
   }
 
-  public start(config: IStreamPreConfig) {
+  public start(config: IStreamConfig) {
     // @ts-ignore
     const stream = this.client.streamingDetectIntent() as WriteStream & ReadStream;
-    const initialStreamConfig = utils.createInitialStreamRequestConfig(config);
 
     stream
       .on(EVENTS.Error, this.handlers.onError)
       .on(EVENTS.Data, this.handlers.onMessage)
       .on(EVENTS.Data, (data: any) => this.checkResult(data));
 
-    stream.write(initialStreamConfig);
+    stream.write(config);
 
-    this.session = config.sessionId;
+    this.session = config.session;
     this.stream = stream;
 
     this.hasEnded = false;
 
     if (this.debug) {
       console.log(`AudioStreamer: Started for ${this.session}`);
-      console.log(initialStreamConfig);
+      console.log(config);
 
       this.fileStream = createWriteStream(DEBUG_FILE);
     }

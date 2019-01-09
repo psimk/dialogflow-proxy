@@ -18,12 +18,17 @@ export enum AudioEncoding {
   SPEEX = 'AUDIO_ENCODING_SPEEX_WITH_HEADER_BYTE',
 }
 
-export interface IStreamPreConfig {
-  sessionId: string;
-  singleUtterance: boolean;
-  audioConfig: {
-    audioEncoding: AudioEncoding;
-    sampleRateHertz: number;
-    languageCode: LanguageCodes;
+export interface IStreamConfig {
+  session: string;
+  queryParams: {
+    session: string;
+  };
+  queryInput: {
+    singleUtterance?: boolean;
+    audioConfig?: {
+      audioEncoding?: AudioEncoding;
+      sampleRateHertz?: number;
+      languageCode?: LanguageCodes;
+    };
   };
 }
