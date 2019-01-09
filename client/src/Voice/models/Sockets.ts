@@ -1,5 +1,4 @@
-import config, { IStreamConfig } from '../utils/config';
-import { converter } from '../utils';
+import { converter, config } from '../utils';
 
 interface IOptions {
   port?: number;
@@ -11,7 +10,7 @@ export enum Command {
 }
 
 const defaultPort = 6060;
-const defaultOrigin = 'localhost';
+const defaultOrigin = '172.17.60.177';
 
 const defaultOnOpen = (url: string) => {
   console.log(`Connection to ${url} has been established`);

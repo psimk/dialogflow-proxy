@@ -7,7 +7,6 @@ export default async (options: MediaTrackConstraintSet = defaultOptions) => {
   try {
     return navigator.mediaDevices.getUserMedia({
       audio: options,
-      video: false,
     });
   } catch (err) {
     console.error(err);

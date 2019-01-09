@@ -2,14 +2,13 @@ import React from 'react';
 import { useToggle } from 'react-use';
 import { AbsoluteButton, DropDownIcon, Container } from './styled';
 import Visualizer from '../Visualizer';
-import Recorder from '../../models/Recorder';
 import { Text } from '../General';
 
 interface IProps {
-  recorder: Recorder;
+  analyser: AnalyserNode;
 }
 
-export default ({ recorder }: IProps) => {
+export default ({ analyser }: IProps) => {
   const [ isDebugVisible, toggleDebugView ] = useToggle(false);
 
   const toggle = () => toggleDebugView(!isDebugVisible);
@@ -25,7 +24,7 @@ export default ({ recorder }: IProps) => {
 
       {isDebugVisible && (
         <Container>
-          <Visualizer analyser={recorder.analyser} />
+          <Visualizer analyser={analyser} />
         </Container>
       )}
     </React.Fragment>

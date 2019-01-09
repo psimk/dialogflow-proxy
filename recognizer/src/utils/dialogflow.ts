@@ -10,7 +10,7 @@ const defaultInitialStreamRequestConfig = {
   queryInput: {
     audioConfig: {
       audioEncoding: AudioEncoding.Linear16,
-      sampleRateHertz: 41000,
+      sampleRateHertz: 16000,
       languageCode: LanguageCodes.enUS,
     },
     singleUtterance: true,
