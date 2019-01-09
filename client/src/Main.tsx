@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import nanoid from 'nanoid';
 import DebugView from './components/DebugView';
-import Recorder from './models/Recorder';
-import Sockets from './models/Sockets';
 import styled from 'styled-components';
 import { Button, Text } from './components/General';
+import intents, { IIntent } from './Voice/config/intents';
+import Voice from './Voice';
 
 const Container = styled.div`
   display: flex;
@@ -15,48 +14,39 @@ const Container = styled.div`
   width: 100%;
 `;
 
-interface IResponse {
-  transcript?: string;
-  intent?: string;
-}
-
-const recorder = new Recorder();
-let socket: Sockets;
+const voice = new Voice();
 
 export default () => {
-  const [ response, setResponse ] = useState<IResponse>({});
+  const [ response, setResponse ] = useState<any>({});
   console.log('Main: render');
 
   useEffect(() => {
-    recorder.init().then(() => {
-      socket = new Sockets();
+    voice.init();
+  });
 
-      socket.onOpen = () => {
-        socket.onMessage = (message: MessageEvent) => {
-          const response = JSON.parse(message.data) as IResponse;
+  useEffect(
+    () => {
+      const { intent } = response;
+      if (!intent) return;
 
-          setResponse(response);
+      // @ts-ignore: TS7071
+      const foundIntent = intents[String(intent)] as IIntent;
 
-          if (response.intent) recorder.enabled = false;
-        };
+      console.log(foundIntent.inputContext);
+      console.log(foundIntent.outputContext);
+    },
+    [ response ],
+  );
 
-        recorder.onAudioData = (floatArray) => socket.sendBuffer(floatArray);
-      };
-    });
+  const onClick = async () => {
+    const response = await voice.listen();
 
-    return () => {
-      recorder.destroy();
-    };
-  }, []);
-
-  const onClick = () => {
-    socket.sendStart(nanoid());
-    recorder.enabled = true;
+    setResponse(response);
   };
 
   return (
     <React.Fragment>
-      <DebugView recorder={recorder} />
+      <DebugView analyser={voice.analyser} />
       <Container>
         <Button onClick={onClick}>Speech Recognition</Button>
         {response.transcript && <Text>{response.transcript}</Text>}
