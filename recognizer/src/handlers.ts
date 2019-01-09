@@ -10,6 +10,10 @@ interface IResultMessage {
   transcript?: string;
 }
 
+interface IHandlerOptions {
+  debug?: boolean;
+}
+
 const parseMessage = ({ queryResult, recognitionResult }: any): IResultMessage | {} => {
   if (queryResult) {
     return {
@@ -27,11 +31,11 @@ const parseMessage = ({ queryResult, recognitionResult }: any): IResultMessage |
   return {};
 };
 
-export default {
-  receiver: (streamer: AudioStreamer, debug?: boolean): TDataHandler => {
-    let debugMessage = '';
+export default ({ debug }: IHandlerOptions = {}) => {
+  let debugMessage = '';
 
-    return (message) => {
+  return {
+    receiver: (streamer: AudioStreamer): TDataHandler => (message) => {
       if (debug) {
         if (typeof message === 'string') {
           debugMessage = message;
@@ -59,14 +63,14 @@ export default {
       }
 
       streamer.write(message as Buffer);
-    };
-  },
+    },
 
-  sender: (ws: WebSocket, debug?: boolean): TSender => (message) => {
-    const parsedMessage = parseMessage(message);
+    sender: (ws: WebSocket): TSender => (message) => {
+      const parsedMessage = parseMessage(message);
 
-    ws.send(JSON.stringify(parsedMessage), console.error);
+      ws.send(JSON.stringify(parsedMessage), console.error);
 
-    if (debug) console.log(`Sender: ${JSON.stringify(parsedMessage, null, 2)}`);
-  },
+      if (debug) console.log(`Sender: ${JSON.stringify(parsedMessage, null, 2)}`);
+    },
+  };
 };
