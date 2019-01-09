@@ -24,15 +24,13 @@ export interface IStreamConfig {
 }
 
 export default {
-  createStreamConfig(sessionId: string): IStreamConfig {
-    return {
-      sessionId,
-      singleUtterance: true,
-      audioConfig: {
-        audioEncoding: AudioEncoding.Linear16,
-        sampleRateHertz: 41000,
-        languageCode: LanguageCodes.enUS,
-      },
-    };
-  },
+  createStreamConfig: (sessionId: string): IStreamConfig => ({
+    sessionId,
+    singleUtterance: true,
+    audioConfig: {
+      audioEncoding: AudioEncoding.Linear16,
+      sampleRateHertz: 41000,
+      languageCode: LanguageCodes.enUS,
+    },
+  }),
 };
