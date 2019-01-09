@@ -1,4 +1,5 @@
 import { converter, config } from '../utils';
+import { IStreamConfigParams } from '../utils/config';
 
 interface IOptions {
   port?: number;
@@ -33,9 +34,9 @@ export default class Sockets {
 
     this.ws.onopen = this.invokedOnOpen;
 
-    this.ws.onmessage = (message) => console.log(JSON.parse(message.data));
+    this.ws.onmessage = message => console.log(JSON.parse(message.data));
 
-    this.ws.onerror = (err) => {
+    this.ws.onerror = err => {
       console.log(`Connection error to ${this.url} has occurred`);
       console.error(err);
 
@@ -60,8 +61,8 @@ export default class Sockets {
     }
   }
 
-  public sendStart(sessionId: string) {
-    const payload = config.createStreamConfig(sessionId);
+  public sendStart(streamConfig: IStreamConfigParams) {
+    const payload = config.createStreamConfig(streamConfig);
     const command = Command.Start;
 
     this.send(JSON.stringify({ payload, command }));

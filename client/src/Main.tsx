@@ -17,22 +17,12 @@ const Container = styled.div`
 const voice = new Voice();
 
 export default () => {
-  const [ expectedContext, setExpectedContext ] = useState<string>('');
   console.log('Main: render');
 
   const onClick = async () => {
-    const response = await voice.listen();
+    const intent = await voice.listen();
 
-    // @ts-ignore: TS7071
-    const intent = intents[String(response.intent)] as IIntent;
-
-    console.log(intent, response);
-
-    if (!intent) return;
-
-    console.log(intent.inputContext === expectedContext);
-
-    setExpectedContext(intent.outputContext);
+    console.log(intent);
   };
 
   return (
