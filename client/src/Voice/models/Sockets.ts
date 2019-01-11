@@ -13,13 +13,8 @@ export enum Command {
 const defaultPort = 6060;
 const defaultOrigin = '172.17.60.177';
 
-const defaultOnOpen = (url: string) => {
-  console.log(`Connection to ${url} has been established`);
-};
-
 export default class Sockets {
   private ws: WebSocket;
-  private invokedOnOpen = () => defaultOnOpen(this.url);
   private url: string;
 
   constructor(options: IOptions = {}) {
@@ -32,8 +27,9 @@ export default class Sockets {
   private init(): void {
     this.ws.binaryType = 'arraybuffer';
 
-    this.ws.onopen = this.invokedOnOpen;
-
+    this.ws.onopen = () => {
+      console.log(`Connection to ${this.url} has been established`);
+    };
     this.ws.onmessage = message => console.log(JSON.parse(message.data));
 
     this.ws.onerror = err => {
@@ -92,14 +88,5 @@ export default class Sockets {
 
   public set onMessage(onMessage: (message: MessageEvent) => void) {
     this.ws.onmessage = onMessage;
-  }
-
-  public set onOpen(onOpen: () => void) {
-    this.invokedOnOpen = () => {
-      defaultOnOpen(this.url);
-      onOpen();
-    };
-
-    this.ws.onopen = this.invokedOnOpen;
   }
 }

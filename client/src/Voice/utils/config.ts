@@ -60,7 +60,7 @@ export default {
         singleUtterance: true,
         audioConfig: {
           audioEncoding: AudioEncoding.Linear16,
-          sampleRateHertz: 16000,
+          sampleRateHertz: 41000,
           languageCode: LanguageCodes.enUS,
         },
       },

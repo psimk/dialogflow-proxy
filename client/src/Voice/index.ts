@@ -29,6 +29,11 @@ export default class Voice {
 
       // @ts-ignore: TS7071
       const intent = intents[String(response.intent)] as IIntent;
+      console.log();
+      console.log(this.sessionId);
+      console.log(`Old Context: ${this.context}`);
+      console.log(`New Context: ${intent.outputContext}`);
+      console.log();
 
       this.context = intent.outputContext;
     };

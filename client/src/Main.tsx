@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import DebugView from './components/DebugView';
 import styled from 'styled-components';
-import { Button, Text } from './components/General';
-import intents, { IIntent } from './Voice/config/intents';
+import { Button } from './components/General';
 import Voice from './Voice';
 
 const Container = styled.div`
@@ -15,12 +14,14 @@ const Container = styled.div`
 `;
 
 const voice = new Voice();
+const voice2 = new Voice();
 
 export default () => {
   console.log('Main: render');
 
   const onClick = async () => {
-    const intent = await voice.listen();
+    const intent = await Promise.all([ voice.listen(), voice2.listen() ]);
+    // const intent = await voice.listen();
 
     console.log(intent);
   };
