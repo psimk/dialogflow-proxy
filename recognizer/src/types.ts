@@ -1,10 +1,6 @@
-export enum LanguageCodes {
-  enUS = 'en',
-}
-
 export enum Command {
-  Start,
-  Stop,
+  Start = 'start',
+  Stop = 'stop',
 }
 
 export enum AudioEncoding {
@@ -18,17 +14,26 @@ export enum AudioEncoding {
   SPEEX = 'AUDIO_ENCODING_SPEEX_WITH_HEADER_BYTE',
 }
 
-export interface IStreamConfig {
+export interface IStreamRequest {
   session: string;
   queryParams: {
     session: string;
+    contexts: Array<{ name: string; lifespanCount: number }>;
   };
   queryInput: {
     singleUtterance?: boolean;
-    audioConfig?: {
-      audioEncoding?: AudioEncoding;
-      sampleRateHertz?: number;
-      languageCode?: LanguageCodes;
+    audioConfig: {
+      audioEncoding: string;
+      sampleRateHertz: number;
+      languageCode: string;
     };
   };
+}
+
+export interface IStreamConfig {
+  sessionId?: string;
+  projectId: string;
+  context: string;
+  languageCode: string;
+  sampleRateHertz: string;
 }

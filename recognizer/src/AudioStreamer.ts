@@ -2,6 +2,7 @@ import { SessionsClient } from 'dialogflow';
 import { ReadStream, WriteStream, createWriteStream } from 'fs';
 import { IStreamConfig } from './types';
 import utils from './utils';
+import nanoid = require('nanoid');
 
 interface IAudioStreamerHandlers {
   onMessage: (() => {}) | any;
@@ -16,21 +17,15 @@ const enum EVENTS {
 }
 
 export default class AudioStreamer {
-  private session: string = '';
   private hasEnded: boolean = false;
   private stream: (WriteStream & ReadStream) | null = null;
   private fileStream: WriteStream | null = null;
 
-  private client: SessionsClient;
+  private client: SessionsClient | undefined;
   private debug: boolean;
   private handlers: IAudioStreamerHandlers;
 
   constructor(handlers: IAudioStreamerHandlers, debug: boolean = false) {
-    this.client = new SessionsClient({
-      projectId: utils.PROJECT_ID,
-      keyFilename: utils.getClientSecretPath(),
-    });
-
     this.handlers = handlers;
     this.debug = debug;
   }
@@ -42,6 +37,13 @@ export default class AudioStreamer {
   }
 
   public start(config: IStreamConfig) {
+    this.client =
+      this.client ||
+      new SessionsClient({
+        projectId: config.projectId,
+        keyFilename: utils.getClientSecretPath(),
+      });
+
     // @ts-ignore
     const stream = this.client.streamingDetectIntent() as WriteStream & ReadStream;
 
@@ -50,15 +52,14 @@ export default class AudioStreamer {
       .on(EVENTS.Data, this.handlers.onMessage)
       .on(EVENTS.Data, (data: any) => this.checkResult(data));
 
-    stream.write(config);
+    stream.write(utils.createInitialStreamRequest({ ...config, sessionId: nanoid() }));
 
-    this.session = config.session;
     this.stream = stream;
 
     this.hasEnded = false;
 
     if (this.debug) {
-      console.log(`AudioStreamer: Started for ${this.session}`);
+      console.log(`AudioStreamer: Started`);
       console.log(config);
 
       this.fileStream = createWriteStream(DEBUG_FILE);
@@ -86,7 +87,7 @@ export default class AudioStreamer {
     }
 
     if (this.debug) {
-      console.log(`AudioStreamer: Stopped for ${this.session}`);
+      console.log(`AudioStreamer: Stopped`);
     }
   }
 }

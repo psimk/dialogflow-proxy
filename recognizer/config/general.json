@@ -1,5 +1,4 @@
 {
-  "logDir": "/logs",
   "debug": true,
-  "wsPort": 6060
+  "wsPort": 8080
 }
