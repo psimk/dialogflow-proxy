@@ -35,5 +35,5 @@ export interface IStreamConfig {
   projectId: string;
   context: string;
   languageCode: string;
-  sampleRateHertz: string;
+  sampleRateHertz: number;
 }

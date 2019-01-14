@@ -2,7 +2,6 @@ import { SessionsClient } from 'dialogflow';
 import { ReadStream, WriteStream, createWriteStream } from 'fs';
 import { IStreamConfig } from './types';
 import utils from './utils';
-import nanoid = require('nanoid');
 
 interface IAudioStreamerHandlers {
   onMessage: (() => {}) | any;
@@ -22,18 +21,19 @@ export default class AudioStreamer {
   private fileStream: WriteStream | null = null;
 
   private client: SessionsClient | undefined;
+  private sessionId: string;
   private debug: boolean;
   private handlers: IAudioStreamerHandlers;
 
-  constructor(handlers: IAudioStreamerHandlers, debug: boolean = false) {
+  constructor(handlers: IAudioStreamerHandlers, sessionId: string, debug: boolean = false) {
     this.handlers = handlers;
     this.debug = debug;
+    this.sessionId = sessionId;
   }
 
   private checkResult(data: any) {
-    if (!this.hasEnded) {
-      if (data && data.recognitionResult && data.recognitionResult.isFinal) this.stop();
-    }
+    if (this.hasEnded) return;
+    if (data && data.recognitionResult && data.recognitionResult.isFinal) this.stop();
   }
 
   public start(config: IStreamConfig) {
@@ -52,11 +52,12 @@ export default class AudioStreamer {
       .on(EVENTS.Data, this.handlers.onMessage)
       .on(EVENTS.Data, (data: any) => this.checkResult(data));
 
-    stream.write(utils.createInitialStreamRequest({ ...config, sessionId: nanoid() }));
+    stream.write(utils.createInitialStreamRequest({ ...config, sessionId: this.sessionId }));
 
     this.stream = stream;
 
     this.hasEnded = false;
+    this.time = undefined;
 
     if (this.debug) {
       console.log(`AudioStreamer: Started`);
