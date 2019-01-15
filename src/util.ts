@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { IStreamConfig, IStreamRequest } from '../types';
+import { IStreamConfig, IStreamRequest } from './types';
 
 const AudioEncoding = 'AUDIO_ENCODING_LINEAR_16';
 
