@@ -1,7 +1,6 @@
 import { join } from 'path';
+import * as config from '../config/general.json';
 import { IStreamConfig, IStreamRequest } from './types';
-
-const AudioEncoding = 'AUDIO_ENCODING_LINEAR_16';
 
 export default {
   getClientSecretPath: () => join(__dirname, '..', '..', './clientSecret.json'),
@@ -9,6 +8,7 @@ export default {
     sessionId,
     context,
     projectId,
+    sampleRateHertz,
     languageCode,
   }: IStreamConfig): IStreamRequest => {
     const sessionPath = `projects/${projectId}/agent/sessions/${sessionId}`;
@@ -18,7 +18,7 @@ export default {
       ? [
           {
             name: contextPath,
-            lifespanCount: 1,
+            lifespanCount: config.contextLifeSpan,
           },
         ]
       : [];
@@ -30,11 +30,11 @@ export default {
         session: sessionPath,
       },
       queryInput: {
-        singleUtterance: true,
+        singleUtterance: config.singleUtterance,
         audioConfig: {
           languageCode,
-          audioEncoding: AudioEncoding,
-          sampleRateHertz: 41000,
+          sampleRateHertz,
+          audioEncoding: config.audioEncoding,
         },
       },
     };

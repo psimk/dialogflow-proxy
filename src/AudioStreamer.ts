@@ -1,4 +1,5 @@
 import { SessionsClient } from 'dialogflow';
+import * as localConfig from '../config/general.json';
 import { ReadStream, WriteStream, createWriteStream } from 'fs';
 import { IStreamConfig } from './types';
 import util from './util';
@@ -7,8 +8,6 @@ interface IAudioStreamerHandlers {
   onMessage: (() => {}) | any;
   onError: (() => {}) | any;
 }
-
-const DEBUG_FILE = 'debug.raw';
 
 const enum EVENTS {
   Error = 'error',
@@ -62,7 +61,7 @@ export default class AudioStreamer {
       console.log(`AudioStreamer: Started`);
       console.log(config);
 
-      this.fileStream = createWriteStream(DEBUG_FILE);
+      this.fileStream = createWriteStream(localConfig.debugFile);
     }
   }
 
